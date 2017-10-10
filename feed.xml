@@ -1,100 +1,99 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="http://jekyllrb.com" version="3.4.0">Jekyll</generator><link href="https://jbleijenberg.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jbleijenberg.github.io/" rel="alternate" type="text/html" /><updated>2017-10-10T20:34:26+02:00</updated><id>https://jbleijenberg.github.io/</id><title type="html">Jeroen Bleijenberg</title><subtitle>Jeroen Bleijenberg's personal page and contact information</subtitle><entry><title type="html">Satis and S3</title><link href="https://jbleijenberg.github.io/satis-and-s3/" rel="alternate" type="text/html" title="Satis and S3" /><published>2017-03-23T03:23:00+01:00</published><updated>2017-03-23T03:23:00+01:00</updated><id>https://jbleijenberg.github.io/satis-and-s3</id><content type="html" xml:base="https://jbleijenberg.github.io/satis-and-s3/">&lt;h2 id=&quot;satis-and-aws-s3&quot;&gt;Satis and AWS S3&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="http://jekyllrb.com" version="3.4.0">Jekyll</generator><link href="https://jbleijenberg.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jbleijenberg.github.io/" rel="alternate" type="text/html" /><updated>2017-10-10T21:03:42+02:00</updated><id>https://jbleijenberg.github.io/</id><title type="html">Jeroen Bleijenberg</title><subtitle>Jeroen Bleijenberg's personal page and contact information</subtitle><entry><title type="html">Satis and S3</title><link href="https://jbleijenberg.github.io/satis-and-s3/" rel="alternate" type="text/html" title="Satis and S3" /><published>2017-03-23T03:23:00+01:00</published><updated>2017-03-23T03:23:00+01:00</updated><id>https://jbleijenberg.github.io/satis-and-s3</id><content type="html" xml:base="https://jbleijenberg.github.io/satis-and-s3/">&lt;h2&gt;Satis and AWS S3&lt;/h2&gt;
+
 &lt;p&gt;Satis is a static composer repository generator. It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.&lt;/p&gt;
 
-&lt;p&gt;It’s alse possible to use Satis as a proxy for packages found on Packagist, GitHub or any other repository.&lt;/p&gt;
+&lt;p&gt;It&amp;#39;s alse possible to use Satis as a proxy for packages found on Packagist, GitHub or any other repository.&lt;/p&gt;
 
 &lt;p&gt;When we started with Satis, we hosted it on a small server which required Apache to serve satis.&lt;/p&gt;
 
-&lt;p&gt;Because the number of packages and repositories grew as we started to work on bigger and more projects, we ran into the “limitations” of hosting Satis on a webserver.&lt;/p&gt;
+&lt;p&gt;Because the number of packages and repositories grew as we started to work on bigger and more projects, we ran into the &amp;quot;limitations&amp;quot; of hosting Satis on a webserver.&lt;/p&gt;
 
-&lt;p&gt;These weren’t really limitations, but we figured that using a webserver was actually overkill because Satis is nothing more than static content.&lt;/p&gt;
+&lt;p&gt;These weren&amp;#39;t really limitations, but we figured that using a webserver was actually overkill because Satis is nothing more than static content.&lt;/p&gt;
 
-&lt;p&gt;This is where AWS S3 came in the picture. S3 is perfect for serving static content without the need of a webserver. A big advantage is that you don’t pay a lot for storage,or traffic. And when first registering an AWS account, you are eligable for the free tier. (See: https://aws.amazon.com/s3/pricing/)&lt;/p&gt;
+&lt;p&gt;This is where AWS S3 came in the picture. S3 is perfect for serving static content without the need of a webserver. A big advantage is that you don&amp;#39;t pay a lot for storage,or traffic. And when first registering an AWS account, you are eligable for the free tier. (See: https://aws.amazon.com/s3/pricing/)&lt;/p&gt;
 
 &lt;p&gt;So no more worries for large Satis configurations!&lt;/p&gt;
 
-&lt;p&gt;###So how did we do this
-Actually, very little changed in the way we generate our Satis files. Our satis configuration has its own repository, so our developers can add new repositories when needed. Whenever a pull request is merged into our mainline, our build agents picks up on this change. And starts to build Satis. Nothing exiting is going on there.&lt;/p&gt;
+&lt;h3&gt;So how did we do this&lt;/h3&gt;
 
-&lt;p&gt;We remove our existing Satis build and create a new one.&lt;/p&gt;
+&lt;p&gt;Actually, very little changed in the way we generate our Satis files. Our satis configuration has its own repository, so our developers can add new repositories when needed. Whenever a pull request is merged into our mainline, our build agents picks up on this change. And starts to build Satis. Nothing exiting is going on there.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ rm -rf web/include/* satis build -n -vvv satis.json web/ 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;This process might take a while of you have a lot of repositories. Depending on your Satis configuration, all package version might be downloaded. This is preferred by us, because not all projects have to (or can) use the latest version of a package. And since S3 is pretty limitless when it comes to storage, we’ll just download everything.&lt;/p&gt;
+&lt;p&gt;We remove our existing Satis build and create a new one. &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ rm -rf web/include/* satis build -n -vvv satis.json web/ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This process might take a while of you have a lot of repositories. Depending on your Satis configuration, all package version might be downloaded. This is preferred by us, because not all projects have to (or can) use the latest version of a package. And since S3 is pretty limitless when it comes to storage, we&amp;#39;ll just download everything.&lt;/p&gt;
 
 &lt;p&gt;The configuration that makes sure we want to use Satis as a proxy is as follows:&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;require-all&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;archive&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;directory&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dist&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;format&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;tar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;skip-dev&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&quot;whitelist&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-            &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;manufacturer&amp;gt;/&amp;lt;package&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;The whitelist flag is optional. When left out, every package, version and dependancy is archived. It’s up to you do decide what you want to proxy. Creating projects with as many packages from your proxy speeds up the &lt;code class=&quot;highlighter-rouge&quot;&gt;composer install&lt;/code&gt; precess quite a bit, because composer doesn’t hae to clone every repository.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-plain&quot; data-lang=&quot;plain&quot;&gt;{
+    &quot;require-all&quot;: true,
+    &quot;archive&quot;: {
+        &quot;directory&quot;: &quot;dist&quot;,
+        &quot;format&quot;: &quot;tar&quot;,
+        &quot;skip-dev&quot;: true,
+        &quot;whitelist&quot;: [
+            &quot;&amp;lt;manufacturer&amp;gt;/&amp;lt;package&amp;gt;&quot;,
+        ]
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The whitelist flag is optional. When left out, every package, version and dependancy is archived. It&amp;#39;s up to you do decide what you want to proxy. Creating projects with as many packages from your proxy speeds up the &lt;code&gt;composer install&lt;/code&gt; precess quite a bit, because composer doesn&amp;#39;t hae to clone every repository.&lt;/p&gt;
 
-&lt;p&gt;After the Satis build is done, we want to upload/sync everything inside ‘web/’ to S3.&lt;/p&gt;
+&lt;p&gt;After the Satis build is done, we want to upload/sync everything inside &amp;#39;web/&amp;#39; to S3.&lt;/p&gt;
 
 &lt;p&gt;Our build agent has the AWS CLI binary installed, so this is pretty easy:&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ aws s3 sync --delete . s3://&amp;lt;your-pretty-bucket&amp;gt;/
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ aws s3 sync --delete . s3://&amp;lt;your-pretty-bucket&amp;gt;/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;This will sync your Satis build to S3, and will remove any packages that are no longer present within Satis.&lt;/p&gt;
 
-&lt;p&gt;That’s it. Now your satis build is usable from AWS S3.&lt;/p&gt;
+&lt;p&gt;That&amp;#39;s it. Now your satis build is usable from AWS S3.&lt;/p&gt;
 
-&lt;h3 id=&quot;wait-i-dont-have-an-s3-bucket-yet&quot;&gt;Wait, i don’t have an S3 bucket yet.&lt;/h3&gt;
-&lt;p&gt;Well, creating an S3 bucket is free. If you don’t have an AWS account yet, please make one.&lt;/p&gt;
+&lt;h3&gt;Wait, i don&amp;#39;t have an S3 bucket yet.&lt;/h3&gt;
+
+&lt;p&gt;Well, creating an S3 bucket is free. If you don&amp;#39;t have an AWS account yet, please make one.&lt;/p&gt;
 
 &lt;p&gt;When you have an AWS account, you can create a S3 bucket. Choose a name that you can recognize, and choose a region that is close to you. For us Dutchies, Frankfurt or Ireland will be just fine.&lt;/p&gt;
 
 &lt;p&gt;When choosing a name, add your company name as prefix/suffix so the name is somewhat unique. The name needs to be unique in the entire region you choose, not just in your account.&lt;/p&gt;
 
-&lt;p&gt;In the next step, we can disable versioning and logging (we simply just don’t care). Adding tags is up to you.&lt;/p&gt;
+&lt;p&gt;In the next step, we can disable versioning and logging (we simply just don&amp;#39;t care). Adding tags is up to you.&lt;/p&gt;
 
-&lt;p&gt;For public permission it’s easier to read permissions to anyone. If you set this to any authenticated user, everyone who wants to run composer install needs an AWS account.&lt;/p&gt;
+&lt;p&gt;For public permission it&amp;#39;s easier to read permissions to anyone. If you set this to any authenticated user, everyone who wants to run composer install needs an AWS account.&lt;/p&gt;
 
 &lt;p&gt;After this, finalize your bucket. It will appear in your bucketlist (pun intended) and click on the name to edit it.&lt;/p&gt;
 
-&lt;p&gt;In the tab ‘Properties’, go to Static website hosting and select ‘Use this bucket to host a website’.&lt;/p&gt;
+&lt;p&gt;In the tab &amp;#39;Properties&amp;#39;, go to Static website hosting and select &amp;#39;Use this bucket to host a website&amp;#39;.&lt;/p&gt;
 
 &lt;p&gt;Now you have an S3 bucket, ready for your Satis build!&lt;/p&gt;
 
-&lt;p&gt;###But my repo url is so ugly
-Your bucket is usable for static website hosting, but your endpoint probably looks something like this:&lt;/p&gt;
+&lt;h3&gt;But my repo url is so ugly&lt;/h3&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://your-pretty-bucket.s3-website-eu-west-1.amazonaws.com&lt;/code&gt;&lt;/p&gt;
-
+&lt;p&gt;Your bucket is usable for static website hosting, but your endpoint probably looks something like this:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;http://your-pretty-bucket.s3-website-eu-west-1.amazonaws.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;You can simply add a CNAME record to your DNS configuration, to make your S3 a bit easier to access.&lt;/p&gt;
 
-&lt;p&gt;But since a while Composer somewhat forces you to use an repository with secure access, unless you’ve added a flag to ignore this.&lt;/p&gt;
+&lt;p&gt;But since a while Composer somewhat forces you to use an repository with secure access, unless you&amp;#39;ve added a flag to ignore this.&lt;/p&gt;
 
-&lt;p&gt;When you want to use SSL with your S3 bucket, you will need to configure CloudFront. We will need a Web distribution for this. I’m assuming you have some knowledge of AWS’ services so will not explain what everything means in the CloudFront console.&lt;/p&gt;
+&lt;p&gt;When you want to use SSL with your S3 bucket, you will need to configure CloudFront. We will need a Web distribution for this. I&amp;#39;m assuming you have some knowledge of AWS&amp;#39; services so will not explain what everything means in the CloudFront console.&lt;/p&gt;
 
-&lt;p&gt;###The SSL certificate.
-Unfortunatly CloudFront doesn’t support 4096-bit certificates, but for this purpose 2048-bit is fine too. It’s up to you where you purchase your certificate. You can import your certificate in AWS’ ACM (AWS Certificate Manager).&lt;/p&gt;
+&lt;h3&gt;The SSL certificate.&lt;/h3&gt;
 
-&lt;p&gt;###Creating a CloudFront distribution
-At ‘Origin Domain Name’ choose your Satis bucket, you’ve created in the steps before. Set ‘Viewer Protocol Policy’ to ‘Redirect HTTP to HTTPS’ The ‘Allowed HTTP Methods’ can be set to ‘GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE’&lt;/p&gt;
+&lt;p&gt;Unfortunatly CloudFront doesn&amp;#39;t support 4096-bit certificates, but for this purpose 2048-bit is fine too. It&amp;#39;s up to you where you purchase your certificate. You can import your certificate in AWS&amp;#39; ACM (AWS Certificate Manager).&lt;/p&gt;
 
-&lt;p&gt;For ‘Object Caching’ we can use Origin Cache Headers. Set ‘Query String Forwarding and Caching’ to none, for better caching.&lt;/p&gt;
+&lt;h3&gt;Creating a CloudFront distribution&lt;/h3&gt;
 
-&lt;p&gt;Select the priceclass that’s best suited for you, but ‘Use Only US, Canada and Europe’ is probably fine.&lt;/p&gt;
+&lt;p&gt;At &amp;#39;Origin Domain Name&amp;#39; choose your Satis bucket, you&amp;#39;ve created in the steps before. Set &amp;#39;Viewer Protocol Policy&amp;#39; to &amp;#39;Redirect HTTP to HTTPS&amp;#39; The &amp;#39;Allowed HTTP Methods&amp;#39; can be set to &amp;#39;GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE&amp;#39;&lt;/p&gt;
 
-&lt;p&gt;Select ‘Custom SSL Certificate (example.com)’ and choose the certificate you just uploaded in ACM.&lt;/p&gt;
+&lt;p&gt;For &amp;#39;Object Caching&amp;#39; we can use Origin Cache Headers. Set &amp;#39;Query String Forwarding and Caching&amp;#39; to none, for better caching.&lt;/p&gt;
 
-&lt;p&gt;!!! Make sure that you select ‘Only Clients that Support Server Name Indication(SNI)’, or else this distrubition is going to cost you about $600,- every month !!!&lt;/p&gt;
+&lt;p&gt;Select the priceclass that&amp;#39;s best suited for you, but &amp;#39;Use Only US, Canada and Europe&amp;#39; is probably fine.&lt;/p&gt;
 
-&lt;p&gt;Supported HTTP versions can bet set to ‘HTTP/1.1, HTTP/1.0 For the default root object, we need to fill in ‘index.html’&lt;/p&gt;
+&lt;p&gt;Select &amp;#39;Custom SSL Certificate (example.com)&amp;#39; and choose the certificate you just uploaded in ACM.&lt;/p&gt;
+
+&lt;p&gt;!!! Make sure that you select &amp;#39;Only Clients that Support Server Name Indication(SNI)&amp;#39;, or else this distrubition is going to cost you about $600,- every month !!!&lt;/p&gt;
+
+&lt;p&gt;Supported HTTP versions can bet set to &amp;#39;HTTP/1.1, HTTP/1.0 For the default root object, we need to fill in &amp;#39;index.html&amp;#39;&lt;/p&gt;
 
 &lt;p&gt;Using IPv6 is up to you, no extra charge.&lt;/p&gt;
 
-&lt;p&gt;And that’s it for CloudFront. After your destribution is deployed, you can access with a secure connection. Don’t forget to add the CNAME records to your DNS configuration.&lt;/p&gt;</content><author><name></name></author><summary type="html">Satis and AWS S3 Satis is a static composer repository generator. It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.</summary></entry></feed>
+&lt;p&gt;And that&amp;#39;s it for CloudFront. After your destribution is deployed, you can access with a secure connection. Don&amp;#39;t forget to add the CNAME records to your DNS configuration.&lt;/p&gt;</content><author><name></name></author><summary type="html">Satis and AWS S3 Satis is a static composer repository generator. It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.</summary></entry></feed>
