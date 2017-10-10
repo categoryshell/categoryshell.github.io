@@ -1,0 +1,100 @@
+<h2 id="satis-and-aws-s3">Satis and AWS S3</h2>
+<p>Satis is a static composer repository generator. It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.</p>
+
+<p>It’s alse possible to use Satis as a proxy for packages found on Packagist, GitHub or any other repository.</p>
+
+<p>When we started with Satis, we hosted it on a small server which required Apache to serve satis.</p>
+
+<p>Because the number of packages and repositories grew as we started to work on bigger and more projects, we ran into the “limitations” of hosting Satis on a webserver.</p>
+
+<p>These weren’t really limitations, but we figured that using a webserver was actually overkill because Satis is nothing more than static content.</p>
+
+<p>This is where AWS S3 came in the picture. S3 is perfect for serving static content without the need of a webserver. A big advantage is that you don’t pay a lot for storage,or traffic. And when first registering an AWS account, you are eligable for the free tier. (See: https://aws.amazon.com/s3/pricing/)</p>
+
+<p>So no more worries for large Satis configurations!</p>
+
+<p>###So how did we do this
+Actually, very little changed in the way we generate our Satis files. Our satis configuration has its own repository, so our developers can add new repositories when needed. Whenever a pull request is merged into our mainline, our build agents picks up on this change. And starts to build Satis. Nothing exiting is going on there.</p>
+
+<p>We remove our existing Satis build and create a new one.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ rm -rf web/include/* satis build -n -vvv satis.json web/ 
+</code></pre>
+</div>
+<p>This process might take a while of you have a lot of repositories. Depending on your Satis configuration, all package version might be downloaded. This is preferred by us, because not all projects have to (or can) use the latest version of a package. And since S3 is pretty limitless when it comes to storage, we’ll just download everything.</p>
+
+<p>The configuration that makes sure we want to use Satis as a proxy is as follows:</p>
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="nt">"require-all"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"archive"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"directory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dist"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tar"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"skip-dev"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"whitelist"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"&lt;manufacturer&gt;/&lt;package&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+<p>The whitelist flag is optional. When left out, every package, version and dependancy is archived. It’s up to you do decide what you want to proxy. Creating projects with as many packages from your proxy speeds up the <code class="highlighter-rouge">composer install</code> precess quite a bit, because composer doesn’t hae to clone every repository.</p>
+
+<p>After the Satis build is done, we want to upload/sync everything inside ‘web/’ to S3.</p>
+
+<p>Our build agent has the AWS CLI binary installed, so this is pretty easy:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ aws s3 sync --delete . s3://&lt;your-pretty-bucket&gt;/
+</code></pre>
+</div>
+
+<p>This will sync your Satis build to S3, and will remove any packages that are no longer present within Satis.</p>
+
+<p>That’s it. Now your satis build is usable from AWS S3.</p>
+
+<h3 id="wait-i-dont-have-an-s3-bucket-yet">Wait, i don’t have an S3 bucket yet.</h3>
+<p>Well, creating an S3 bucket is free. If you don’t have an AWS account yet, please make one.</p>
+
+<p>When you have an AWS account, you can create a S3 bucket. Choose a name that you can recognize, and choose a region that is close to you. For us Dutchies, Frankfurt or Ireland will be just fine.</p>
+
+<p>When choosing a name, add your company name as prefix/suffix so the name is somewhat unique. The name needs to be unique in the entire region you choose, not just in your account.</p>
+
+<p>In the next step, we can disable versioning and logging (we simply just don’t care). Adding tags is up to you.</p>
+
+<p>For public permission it’s easier to read permissions to anyone. If you set this to any authenticated user, everyone who wants to run composer install needs an AWS account.</p>
+
+<p>After this, finalize your bucket. It will appear in your bucketlist (pun intended) and click on the name to edit it.</p>
+
+<p>In the tab ‘Properties’, go to Static website hosting and select ‘Use this bucket to host a website’.</p>
+
+<p>Now you have an S3 bucket, ready for your Satis build!</p>
+
+<p>###But my repo url is so ugly
+Your bucket is usable for static website hosting, but your endpoint probably looks something like this:</p>
+
+<p><code class="highlighter-rouge">http://your-pretty-bucket.s3-website-eu-west-1.amazonaws.com</code></p>
+
+<p>You can simply add a CNAME record to your DNS configuration, to make your S3 a bit easier to access.</p>
+
+<p>But since a while Composer somewhat forces you to use an repository with secure access, unless you’ve added a flag to ignore this.</p>
+
+<p>When you want to use SSL with your S3 bucket, you will need to configure CloudFront. We will need a Web distribution for this. I’m assuming you have some knowledge of AWS’ services so will not explain what everything means in the CloudFront console.</p>
+
+<p>###The SSL certificate.
+Unfortunatly CloudFront doesn’t support 4096-bit certificates, but for this purpose 2048-bit is fine too. It’s up to you where you purchase your certificate. You can import your certificate in AWS’ ACM (AWS Certificate Manager).</p>
+
+<p>###Creating a CloudFront distribution
+At ‘Origin Domain Name’ choose your Satis bucket, you’ve created in the steps before. Set ‘Viewer Protocol Policy’ to ‘Redirect HTTP to HTTPS’ The ‘Allowed HTTP Methods’ can be set to ‘GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE’</p>
+
+<p>For ‘Object Caching’ we can use Origin Cache Headers. Set ‘Query String Forwarding and Caching’ to none, for better caching.</p>
+
+<p>Select the priceclass that’s best suited for you, but ‘Use Only US, Canada and Europe’ is probably fine.</p>
+
+<p>Select ‘Custom SSL Certificate (example.com)’ and choose the certificate you just uploaded in ACM.</p>
+
+<p>!!! Make sure that you select ‘Only Clients that Support Server Name Indication(SNI)’, or else this distrubition is going to cost you about $600,- every month !!!</p>
+
+<p>Supported HTTP versions can bet set to ‘HTTP/1.1, HTTP/1.0 For the default root object, we need to fill in ‘index.html’</p>
+
+<p>Using IPv6 is up to you, no extra charge.</p>
+
+<p>And that’s it for CloudFront. After your destribution is deployed, you can access with a secure connection. Don’t forget to add the CNAME records to your DNS configuration.</p>
