@@ -1,4 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="http://jekyllrb.com" version="3.4.0">Jekyll</generator><link href="https://jbleijenberg.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jbleijenberg.github.io/" rel="alternate" type="text/html" /><updated>2017-10-10T21:44:20+02:00</updated><id>https://jbleijenberg.github.io/</id><title type="html">Jeroen Bleijenberg</title><subtitle>Jeroen Bleijenberg's personal page and contact information</subtitle><entry><title type="html">Satis and S3</title><link href="https://jbleijenberg.github.io/satis-and-s3/" rel="alternate" type="text/html" title="Satis and S3" /><published>2017-03-23T03:23:00+01:00</published><updated>2017-03-23T03:23:00+01:00</updated><id>https://jbleijenberg.github.io/satis-and-s3</id><content type="html" xml:base="https://jbleijenberg.github.io/satis-and-s3/">&lt;h2&gt;Satis and AWS S3&lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="http://jekyllrb.com" version="3.4.0">Jekyll</generator><link href="https://jbleijenberg.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jbleijenberg.github.io/" rel="alternate" type="text/html" /><updated>2017-10-12T10:07:13+02:00</updated><id>https://jbleijenberg.github.io/</id><title type="html">Jeroen Bleijenberg</title><subtitle>Jeroen Bleijenberg's personal page and contact information</subtitle><entry><title type="html">Recompile GD module for PHP 5.6.x</title><link href="https://jbleijenberg.github.io/recompile-gd-module-for-php-56x/" rel="alternate" type="text/html" title="Recompile GD module for PHP 5.6.x" /><published>2017-10-12T00:00:00+02:00</published><updated>2017-10-12T00:00:00+02:00</updated><id>https://jbleijenberg.github.io/recompile-gd-module-for-php-56x</id><content type="html" xml:base="https://jbleijenberg.github.io/recompile-gd-module-for-php-56x/">&lt;p&gt;When using PHP5.6 with the GD module enabled, you can miss out on some GD function when PHP itself isn&amp;#39;t compiled with GD support enabled.
+Errors like this may pop up in your php_error.log&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;PHP Fatal error:  Call to undefined function imageantialias() in ...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If we test this via the command line, we can see that it&amp;#39;s true (why shouldn&amp;#39;t it be?):&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ php -r &quot;var_dump(function_exists('imageantialias'));&quot;
+bool(false)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Recompiling PHP is a way to go, but could bring some unexpected issues if you don&amp;#39;t know what you&amp;#39;re doing.
+Another option is to rebuild the GD module.&lt;/p&gt;
+
+&lt;p&gt;In order for this to work, i had to install some packages. This might not be the case for you.
+The packages i needed to install before recompiling were:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;php-devel&lt;/li&gt;
+&lt;li&gt;libjpeg-turbo-devel&lt;/li&gt;
+&lt;li&gt;libpng-devel&lt;/li&gt;
+&lt;li&gt;libxml2-devel&lt;/li&gt;
+&lt;li&gt;libXpm-devel&lt;/li&gt;
+&lt;li&gt;freetype-devel&lt;/li&gt;
+&lt;li&gt;gcc-devel&lt;/li&gt;
+&lt;li&gt;t1lib-devel&lt;/li&gt;
+&lt;li&gt;libvpx&lt;/li&gt;
+&lt;li&gt;libtool&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Next, download your version of the PHP source and move to the GD extension directory.
+For me, this was PHP 5.6.31&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ cd /tmp
+$ wget http://cz2.php.net/get/php-5.6.31.tar.gz/from/this/mirror -O php-5.6.31.tar.gz
+$ tar -xvf php-5.6.31.tar.gz
+$ cd php-5.6.31/ext/gd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Prepare the extension&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ phpize
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Configure the extension&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ ./configure --with-php-config=/usr/bin/php-config --with-freetype-dir=&amp;lt;YOUR_VALUE&amp;gt; --with-jpeg-dir=&amp;lt;YOUR_VALUE&amp;gt; --with-xpm-dir=&amp;lt;YOUR_VALUE&amp;gt; --with-vpx-dir=&amp;lt;YOUR_VALUE&amp;gt; --with-t1lib
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;You can find the values you need with &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ php-config --configure-options
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;After the configuration is done, run make&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ make
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;After Make is done, you should see output similar like this:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;----------------------------------------------------------------------
+Libraries have been installed in:
+   /tmp/php-5.6.31/ext/gd/modules
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+Installing shared extensions:     /usr/lib64/php/modules/
+Installing header files:           /usr/include/php/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Copy the gd.so file from the modules dir, to the modules dir of your PHP installation.
+You need to overwrite the gd.so file that already is present.
+In this case that was &lt;em&gt;/usr/lib64/php/modules/&lt;/em&gt;  as was told by the output above.&lt;/p&gt;
+
+&lt;p&gt;Restart Apache, and verify that the new GD module is working.
+Check &lt;code&gt;phpinfo();&lt;/code&gt; to see if the module is there and check your error logs to see if PHP isn&amp;#39;t having trouble with your new GD extension.&lt;/p&gt;
+
+&lt;p&gt;If that&amp;#39;s all good, &lt;code&gt;function_exists()&lt;/code&gt; should return &lt;code&gt;true&lt;/code&gt; now:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ php -r &quot;var_dump(function_exists('imageantialias'));&quot;
+bool(true)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">When using PHP5.6 with the GD module enabled, you can miss out on some GD function when PHP itself isn&amp;#39;t compiled with GD support enabled. Errors like this may pop up in your php_error.log</summary></entry><entry><title type="html">Satis and S3</title><link href="https://jbleijenberg.github.io/satis-and-s3/" rel="alternate" type="text/html" title="Satis and S3" /><published>2017-03-23T03:23:00+01:00</published><updated>2017-03-23T03:23:00+01:00</updated><id>https://jbleijenberg.github.io/satis-and-s3</id><content type="html" xml:base="https://jbleijenberg.github.io/satis-and-s3/">&lt;h2&gt;Satis and AWS S3&lt;/h2&gt;
 
 &lt;p&gt;Satis is a static composer repository generator. It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.&lt;/p&gt;
 

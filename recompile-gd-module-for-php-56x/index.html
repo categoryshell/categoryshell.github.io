@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107982907-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-107982907-1');
+</script>
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Recompile GD module for PHP 5.6.x</title>
+  <meta name="description" content="">
+
+  <link rel="shortcut icon" href="/assets/img/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Oswald:400,700|Roboto:400,700" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="/assets/stylesheets/dark.css">
+</head>
+
+
+  <body>
+
+    <header class="header">
+  <h1 class="logo">
+    <a href="/" class="logo-link">Jeroen Bleijenberg</a>
+  </h1>
+  <nav class="main-menu">
+    <ul>
+      <li><a href="/blog/">Blog</a></li>
+    </ul>
+  </nav>
+</header>
+
+
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="page-header">
+  <h1 class="page-title">Recompile GD module for PHP 5.6.x</h1>
+  <span class="page-list-date">
+    <i class="fa fa-calendar-o" aria-hidden="true"></i> October 12, 2017
+  </span>
+</div>
+<div class="post-container">
+  
+  <div class="post-content">
+    <article>
+      
+      <p>When using PHP5.6 with the GD module enabled, you can miss out on some GD function when PHP itself isn&#39;t compiled with GD support enabled.
+Errors like this may pop up in your php_error.log</p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">PHP Fatal error:  Call to undefined function imageantialias() in ...
+</code></pre></div>
+
+<p>If we test this via the command line, we can see that it&#39;s true (why shouldn&#39;t it be?):</p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">$ php -r "var_dump(function_exists('imageantialias'));"
+bool(false)
+</code></pre></div>
+
+<p>Recompiling PHP is a way to go, but could bring some unexpected issues if you don&#39;t know what you&#39;re doing.
+Another option is to rebuild the GD module.</p>
+
+<p>In order for this to work, i had to install some packages. This might not be the case for you.
+The packages i needed to install before recompiling were:</p>
+
+<ul>
+<li>php-devel</li>
+<li>libjpeg-turbo-devel</li>
+<li>libpng-devel</li>
+<li>libxml2-devel</li>
+<li>libXpm-devel</li>
+<li>freetype-devel</li>
+<li>gcc-devel</li>
+<li>t1lib-devel</li>
+<li>libvpx</li>
+<li>libtool</li>
+</ul>
+
+<p>Next, download your version of the PHP source and move to the GD extension directory.
+For me, this was PHP 5.6.31</p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">$ cd /tmp
+$ wget http://cz2.php.net/get/php-5.6.31.tar.gz/from/this/mirror -O php-5.6.31.tar.gz
+$ tar -xvf php-5.6.31.tar.gz
+$ cd php-5.6.31/ext/gd
+</code></pre></div>
+
+<p>Prepare the extension</p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">$ phpize
+</code></pre></div>
+
+<p>Configure the extension</p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">$ ./configure --with-php-config=/usr/bin/php-config --with-freetype-dir=&lt;YOUR_VALUE&gt; --with-jpeg-dir=&lt;YOUR_VALUE&gt; --with-xpm-dir=&lt;YOUR_VALUE&gt; --with-vpx-dir=&lt;YOUR_VALUE&gt; --with-t1lib
+</code></pre></div>
+
+<p>You can find the values you need with </p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">$ php-config --configure-options
+</code></pre></div>
+
+<p>After the configuration is done, run make</p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">$ make
+</code></pre></div>
+
+<p>After Make is done, you should see output similar like this:</p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">----------------------------------------------------------------------
+Libraries have been installed in:
+   /tmp/php-5.6.31/ext/gd/modules
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+Installing shared extensions:     /usr/lib64/php/modules/
+Installing header files:           /usr/include/php/
+</code></pre></div>
+
+<p>Copy the gd.so file from the modules dir, to the modules dir of your PHP installation.
+You need to overwrite the gd.so file that already is present.
+In this case that was <em>/usr/lib64/php/modules/</em>  as was told by the output above.</p>
+
+<p>Restart Apache, and verify that the new GD module is working.
+Check <code>phpinfo();</code> to see if the module is there and check your error logs to see if PHP isn&#39;t having trouble with your new GD extension.</p>
+
+<p>If that&#39;s all good, <code>function_exists()</code> should return <code>true</code> now:</p>
+
+<div class="highlight"><pre><code class="language-" data-lang="">$ php -r "var_dump(function_exists('imageantialias'));"
+bool(true)
+</code></pre></div>
+
+    </article>
+    <div class="post-share">
+  <h5>Share:</h5>
+  
+  <a href="" title="Share on Twitter" onclick="window.open('https://twitter.com/home?status=Recompile GD module for PHP 5.6.x - https://jbleijenberg.github.io/recompile-gd-module-for-php-56x/ by @jbleijenberg', 'newwindow', 'width=500, height=225'); return false;" data-turbolinks="false">
+    <i class="fa fa-twitter" aria-hidden="true"></i>
+  </a>
+  <a href="" title="Share on Facebook" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https://jbleijenberg.github.io/recompile-gd-module-for-php-56x/', 'newwindow', 'width=500, height=500'); return false;" data-turbolinks="false">
+    <i class="fa fa-facebook" aria-hidden="true"></i>
+  </a>
+  <a href="" title="Share on Google+" onclick="window.open('https://plus.google.com/share?url=https://jbleijenberg.github.io/recompile-gd-module-for-php-56x/', 'newwindow', 'width=550, height=400'); return false;" data-turbolinks="false">
+    <i class="fa fa-google-plus" aria-hidden="true"></i>
+  </a>
+</div>
+
+    
+
+  </div>
+</div>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+  <p class="copyright">2017 @ Jeroen Bleijenberg</p>
+</footer>
+
+    <!-- Main Js -->
+<script src="/assets/js/function.js"></script>
+
+  </body>
+
+</html>
