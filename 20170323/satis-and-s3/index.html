@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Satis & S3</title>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,600">
+    <link href="/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Category: Shell" href="/feed.xml" />
+</head>
+
+
+<body class="preload">
+    <div class="top"></div>
+    <div class="profile" style="background-image: url(http://apple.wallpapersfine.com/wallpapers/original/1242x2208/w-9943.jpg);">
+        <img src="http://www.gravatar.com/avatar/664c8d56d6b4f52906e34f81df766d90?s=140" class="img-circle" />
+        <h3>Category: Shell</h3>
+        <p>A tiny blog for DevOPS related items</p>
+        <ul class="social">
+            
+            <a href="http://github.com/jbleijenberg" target="_blank">
+                <i class="fa fa-github"></i>
+            </a>
+             
+            <a href="http://twitter.com/wirelesskitteh" target="_blank">
+                <i class="fa fa-twitter"></i>
+            </a>
+             
+            <a href="http://linkedin.com/in/jeroen-bleijenberg-83417866" target="_blank">
+                <i class="fa fa-linkedin"></i>
+            </a>
+             
+            <a href="http://pinterest.com/" target="_blank">
+                <i class="fa fa-pinterest"></i>
+            </a>
+             
+            <a href="http://facebook.com/" target="_blank">
+                <i class="fa fa-facebook"></i>
+            </a>
+            
+        </ul>
+    </div>
+    <div class="posts">
+        <header class="bloghead">
+    <nav class="bloghead-nav">
+        
+        <a href="/">Home<span> &nbsp;/&nbsp; </span></a> 
+        <a href="/about">About<span> &nbsp;/&nbsp; </span></a> 
+    </nav>
+</header>
+
+<div class="content post">
+  <h1 class="post-title">Satis & S3</h1>
+  <div class="post-date">
+    <time>23 Mar 2017</time>
+  </div>
+  <p>Prerequisites:</p>
+
+<ul>
+  <li><a href="/20170323/s3-bucket-for-satis">Create an S3 bucket</a></li>
+</ul>
+
+<p>Satis is a static composer repository generator.<br />
+It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.</p>
+
+<p>It’s alse possible to use Satis as a proxy for packages found on Packagist, GitHub or any other repository.</p>
+
+<p>When i started with Satis, i hosted it on a small server which required Apache to serve Satis.<br />
+Because the number of packages and repositories grew as i started to work on bigger and more projects, i ran into the “limitations” of hosting Satis on a webserver.</p>
+
+<p>These weren’t really limitations, but i figured that using a webserver was actually overkill because Satis is nothing more than static content.</p>
+
+<p>This is where AWS S3 came in the picture.<br />
+S3 is perfect for serving static content without the need of a webserver.<br />
+A big advantage is that you don’t pay a lot for storage,or traffic.<br />
+And when first registering an AWS account, you are eligable for the free tier. (See: https://aws.amazon.com/s3/pricing/)</p>
+
+<p>So no more worries for large Satis configurations!</p>
+
+<p>So how did i do this?<br />
+Actually, very little changed in the way we generate our Satis files.<br />
+My satis configuration has its own repository, so i can add new repositories when needed. Whenever a pull request is merged into the mainline, a build agents picks up on this change<br />
+and starts to build Satis.<br />
+Nothing exiting is going on there.</p>
+
+<p>I removed the existing Satis build and create a new one:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">rm</span> <span class="nt">-rf</span> web/include/<span class="k">*</span> satis build <span class="nt">-n</span> <span class="nt">-vvv</span> satis.json web/ 
+</code></pre></div></div>
+
+<p>This process might take a while of you have a lot of repositories.<br />
+Depending on your Satis configuration, all package version might be downloaded.<br />
+This is preferred by me, because not all projects have to (or can) use the latest version of a package.<br />
+And since S3 is pretty limitless when it comes to storage, i’ll just download everything.</p>
+
+<p>The configuration that makes sure i want to use Satis as a proxy is as follows:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"require-all"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"archive"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"directory"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dist"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"format"</span><span class="p">:</span><span class="w"> </span><span class="s2">"tar"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"skip-dev"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"whitelist"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="s2">"&lt;manufacturer&gt;/&lt;package&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The whitelist flag is optional.<br />
+When left out, every package, version and dependancy is archived.<br />
+It’s up to you do decide what you want to proxy. Creating projects with as many packages from your proxy speeds up the composer install precess quite a bit, because composer doesn’t hae to clone every repository.</p>
+
+<p>After the Satis build is done, you want to upload/sync everything inside ‘web/’ to S3.</p>
+
+<p>My build agent has the AWS CLI binary installed, so this is pretty easy:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>aws s3 <span class="nb">sync</span> <span class="nt">--delete</span> <span class="nb">.</span> s3://&lt;your-bucket&gt;/
+</code></pre></div></div>
+
+<p>This will sync your Satis build to S3, and will remove any packages that are no longer present within Satis.</p>
+
+<p>That’s it. Now your satis build is usable from AWS S3.</p>
+
+<p>If you want to use a more human friendly domain, you could use CloudFront to serve the files
+I’ve written a <a href="/20170323/from-cloudfront-to-s3">small article</a> on how to accomplish this</p>
+
+</div>
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+var disqus_shortname = '';
+var disqus_identifier = '/20170323/satis-and-s3/';
+
+(function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+</body>
+<script type="text/javascript">
+    window.onload = function(){
+        document.getElementsByTagName("BODY")[0].classList.remove("preload");
+    }
+</script>
+</html>

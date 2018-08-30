@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Recompile GD for PHP5.6</title>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,600">
+    <link href="/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Category: Shell" href="/feed.xml" />
+</head>
+
+
+<body class="preload">
+    <div class="top"></div>
+    <div class="profile" style="background-image: url(http://apple.wallpapersfine.com/wallpapers/original/1242x2208/w-9943.jpg);">
+        <img src="http://www.gravatar.com/avatar/664c8d56d6b4f52906e34f81df766d90?s=140" class="img-circle" />
+        <h3>Category: Shell</h3>
+        <p>A tiny blog for DevOPS related items</p>
+        <ul class="social">
+            
+            <a href="http://github.com/jbleijenberg" target="_blank">
+                <i class="fa fa-github"></i>
+            </a>
+             
+            <a href="http://twitter.com/wirelesskitteh" target="_blank">
+                <i class="fa fa-twitter"></i>
+            </a>
+             
+            <a href="http://linkedin.com/in/jeroen-bleijenberg-83417866" target="_blank">
+                <i class="fa fa-linkedin"></i>
+            </a>
+             
+            <a href="http://pinterest.com/" target="_blank">
+                <i class="fa fa-pinterest"></i>
+            </a>
+             
+            <a href="http://facebook.com/" target="_blank">
+                <i class="fa fa-facebook"></i>
+            </a>
+            
+        </ul>
+    </div>
+    <div class="posts">
+        <header class="bloghead">
+    <nav class="bloghead-nav">
+        
+        <a href="/">Home<span> &nbsp;/&nbsp; </span></a> 
+        <a href="/about">About<span> &nbsp;/&nbsp; </span></a> 
+    </nav>
+</header>
+
+<div class="content post">
+  <h1 class="post-title">Recompile GD for PHP5.6</h1>
+  <div class="post-date">
+    <time>12 Oct 2017</time>
+  </div>
+  <p>When using PHP5.6 with the GD module enabled, you can miss out on some GD function when PHP itself isn’t compiled with GD support enabled.<br />
+Errors like this may pop up in your php_error.log:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PHP Fatal error:  Call to undefined <span class="k">function </span>imageantialias<span class="o">()</span> <span class="k">in</span> ...
+</code></pre></div></div>
+
+<p>If we test this via the command line, we can see that it’s true (why shouldn’t it be?):</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>php <span class="nt">-r</span> <span class="s2">"var_dump(function_exists('imageantialias'));"</span>
+bool<span class="o">(</span><span class="nb">false</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Recompiling PHP is a way to go, but could bring some unexpected issues if you don’t know what you’re doing.<br />
+Another option is to rebuild the GD module.</p>
+
+<p>In order for this to work, i had to install some packages.<br />
+This might not be the case for you. The packages i needed to install before recompiling were:</p>
+
+<ul>
+  <li>php-devel</li>
+  <li>libjpeg-turbo-devel</li>
+  <li>libpng-devel</li>
+  <li>libxml2-devel</li>
+  <li>libXpm-devel</li>
+  <li>freetype-devel</li>
+  <li>gcc-devel</li>
+  <li>t1lib-devel</li>
+  <li>libvpx</li>
+  <li>libtool</li>
+</ul>
+
+<p>Next, download your version of the PHP source and move to the GD extension directory.<br />
+For me, this was PHP 5.6.31</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> /tmp
+<span class="nv">$ </span>wget http://cz2.php.net/get/php-5.6.31.tar.gz/from/this/mirror <span class="nt">-O</span> php-5.6.31.tar.gz
+<span class="nv">$ </span><span class="nb">tar</span> <span class="nt">-xvf</span> php-5.6.31.tar.gz
+<span class="nv">$ </span><span class="nb">cd </span>php-5.6.31/ext/gd
+</code></pre></div></div>
+
+<p>Prepare the extension:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>phpize
+</code></pre></div></div>
+
+<p>Configure the extension:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>./configure <span class="nt">--with-php-config</span><span class="o">=</span>/usr/bin/php-config <span class="nt">--with-freetype-dir</span><span class="o">=</span>&lt;YOUR_VALUE&gt; <span class="nt">--with-jpeg-dir</span><span class="o">=</span>&lt;YOUR_VALUE&gt; <span class="nt">--with-xpm-dir</span><span class="o">=</span>&lt;YOUR_VALUE&gt; <span class="nt">--with-vpx-dir</span><span class="o">=</span>&lt;YOUR_VALUE&gt; <span class="nt">--with-t1lib</span>
+</code></pre></div></div>
+
+<p>You can find the required values by running this command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>php-config <span class="nt">--configure-options</span>
+</code></pre></div></div>
+
+<p>After the configuration is done, run make:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>make
+</code></pre></div></div>
+
+<p>When make is done, you should get output similar like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">----------------------------------------------------------------------</span>
+Libraries have been installed <span class="k">in</span>:
+   /tmp/php-5.6.31/ext/gd/modules
+
+If you ever happen to want to <span class="nb">link </span>against installed libraries
+<span class="k">in </span>a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the <span class="sb">`</span><span class="nt">-LLIBDIR</span><span class="s1">'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH'</span> environment variable
+     during execution
+   - add LIBDIR to the <span class="sb">`</span>LD_RUN_PATH<span class="s1">' environment variable
+     during linking
+   - use the `-Wl,-rpath -Wl,LIBDIR'</span> linker flag
+   - have your system administrator add LIBDIR to <span class="sb">`</span>/etc/ld.so.conf<span class="s1">'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+Installing shared extensions:     /usr/lib64/php/modules/
+Installing header files:           /usr/include/php/
+</span></code></pre></div></div>
+
+<p>Copy the gd.so file from the modules dir, to the modules dir of your PHP installation.<br />
+You need to overwrite the gd.so file that already is present.<br />
+In this case that was /usr/lib64/php/modules/ as was told by the output above.</p>
+
+<p>Restart Apache, and verify that the new GD module is working.<br />
+Check phpinfo(); to see if the module is there and check your error logs to see if PHP isn’t having trouble with your new GD extension.</p>
+
+<p>If that’s all good, <code class="highlighter-rouge">function_exists()</code> should return true now.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>php <span class="nt">-r</span> <span class="s2">"var_dump(function_exists('imageantialias'));"</span>
+bool<span class="o">(</span><span class="nb">true</span><span class="o">)</span>
+</code></pre></div></div>
+
+</div>
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+var disqus_shortname = '';
+var disqus_identifier = '/20171012/recompile-gd-module-for-php-56x/';
+
+(function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+</body>
+<script type="text/javascript">
+    window.onload = function(){
+        document.getElementsByTagName("BODY")[0].classList.remove("preload");
+    }
+</script>
+</html>

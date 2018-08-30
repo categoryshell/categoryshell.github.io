@@ -1,177 +1,260 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="http://jekyllrb.com" version="3.4.0">Jekyll</generator><link href="https://jbleijenberg.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jbleijenberg.github.io/" rel="alternate" type="text/html" /><updated>2017-10-12T10:07:13+02:00</updated><id>https://jbleijenberg.github.io/</id><title type="html">Jeroen Bleijenberg</title><subtitle>Jeroen Bleijenberg's personal page and contact information</subtitle><entry><title type="html">Recompile GD module for PHP 5.6.x</title><link href="https://jbleijenberg.github.io/recompile-gd-module-for-php-56x/" rel="alternate" type="text/html" title="Recompile GD module for PHP 5.6.x" /><published>2017-10-12T00:00:00+02:00</published><updated>2017-10-12T00:00:00+02:00</updated><id>https://jbleijenberg.github.io/recompile-gd-module-for-php-56x</id><content type="html" xml:base="https://jbleijenberg.github.io/recompile-gd-module-for-php-56x/">&lt;p&gt;When using PHP5.6 with the GD module enabled, you can miss out on some GD function when PHP itself isn&amp;#39;t compiled with GD support enabled.
-Errors like this may pop up in your php_error.log&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;PHP Fatal error:  Call to undefined function imageantialias() in ...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;If we test this via the command line, we can see that it&amp;#39;s true (why shouldn&amp;#39;t it be?):&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ php -r &quot;var_dump(function_exists('imageantialias'));&quot;
-bool(false)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Recompiling PHP is a way to go, but could bring some unexpected issues if you don&amp;#39;t know what you&amp;#39;re doing.
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<channel>
+		<title>Category: Shell</title>
+		<link>http://localhost:4000</link>
+		<atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+		
+			<item>
+				<title>Recompile GD for PHP5.6</title>
+        <description>&lt;p&gt;When using PHP5.6 with the GD module enabled, you can miss out on some GD function when PHP itself isn’t compiled with GD support enabled.&lt;br /&gt;
+Errors like this may pop up in your php_error.log:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;PHP Fatal error:  Call to undefined &lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;imageantialias&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; ...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If we test this via the command line, we can see that it’s true (why shouldn’t it be?):&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;php &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;var_dump(function_exists('imageantialias'));&quot;&lt;/span&gt;
+bool&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Recompiling PHP is a way to go, but could bring some unexpected issues if you don’t know what you’re doing.&lt;br /&gt;
 Another option is to rebuild the GD module.&lt;/p&gt;
 
-&lt;p&gt;In order for this to work, i had to install some packages. This might not be the case for you.
-The packages i needed to install before recompiling were:&lt;/p&gt;
+&lt;p&gt;In order for this to work, i had to install some packages.&lt;br /&gt;
+This might not be the case for you. The packages i needed to install before recompiling were:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;php-devel&lt;/li&gt;
-&lt;li&gt;libjpeg-turbo-devel&lt;/li&gt;
-&lt;li&gt;libpng-devel&lt;/li&gt;
-&lt;li&gt;libxml2-devel&lt;/li&gt;
-&lt;li&gt;libXpm-devel&lt;/li&gt;
-&lt;li&gt;freetype-devel&lt;/li&gt;
-&lt;li&gt;gcc-devel&lt;/li&gt;
-&lt;li&gt;t1lib-devel&lt;/li&gt;
-&lt;li&gt;libvpx&lt;/li&gt;
-&lt;li&gt;libtool&lt;/li&gt;
+  &lt;li&gt;php-devel&lt;/li&gt;
+  &lt;li&gt;libjpeg-turbo-devel&lt;/li&gt;
+  &lt;li&gt;libpng-devel&lt;/li&gt;
+  &lt;li&gt;libxml2-devel&lt;/li&gt;
+  &lt;li&gt;libXpm-devel&lt;/li&gt;
+  &lt;li&gt;freetype-devel&lt;/li&gt;
+  &lt;li&gt;gcc-devel&lt;/li&gt;
+  &lt;li&gt;t1lib-devel&lt;/li&gt;
+  &lt;li&gt;libvpx&lt;/li&gt;
+  &lt;li&gt;libtool&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Next, download your version of the PHP source and move to the GD extension directory.
+&lt;p&gt;Next, download your version of the PHP source and move to the GD extension directory.&lt;br /&gt;
 For me, this was PHP 5.6.31&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ cd /tmp
-$ wget http://cz2.php.net/get/php-5.6.31.tar.gz/from/this/mirror -O php-5.6.31.tar.gz
-$ tar -xvf php-5.6.31.tar.gz
-$ cd php-5.6.31/ext/gd
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Prepare the extension&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ phpize
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Configure the extension&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ ./configure --with-php-config=/usr/bin/php-config --with-freetype-dir=&amp;lt;YOUR_VALUE&amp;gt; --with-jpeg-dir=&amp;lt;YOUR_VALUE&amp;gt; --with-xpm-dir=&amp;lt;YOUR_VALUE&amp;gt; --with-vpx-dir=&amp;lt;YOUR_VALUE&amp;gt; --with-t1lib
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;You can find the values you need with &lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ php-config --configure-options
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;After the configuration is done, run make&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ make
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;After Make is done, you should see output similar like this:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;----------------------------------------------------------------------
-Libraries have been installed in:
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /tmp
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;wget http://cz2.php.net/get/php-5.6.31.tar.gz/from/this/mirror &lt;span class=&quot;nt&quot;&gt;-O&lt;/span&gt; php-5.6.31.tar.gz
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;tar&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-xvf&lt;/span&gt; php-5.6.31.tar.gz
+&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;php-5.6.31/ext/gd
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Prepare the extension:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;phpize
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Configure the extension:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;./configure &lt;span class=&quot;nt&quot;&gt;--with-php-config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/usr/bin/php-config &lt;span class=&quot;nt&quot;&gt;--with-freetype-dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;YOUR_VALUE&amp;gt; &lt;span class=&quot;nt&quot;&gt;--with-jpeg-dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;YOUR_VALUE&amp;gt; &lt;span class=&quot;nt&quot;&gt;--with-xpm-dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;YOUR_VALUE&amp;gt; &lt;span class=&quot;nt&quot;&gt;--with-vpx-dir&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;YOUR_VALUE&amp;gt; &lt;span class=&quot;nt&quot;&gt;--with-t1lib&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can find the required values by running this command:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;php-config &lt;span class=&quot;nt&quot;&gt;--configure-options&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After the configuration is done, run make:&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;make
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;When make is done, you should get output similar like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;----------------------------------------------------------------------&lt;/span&gt;
+Libraries have been installed &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;:
    /tmp/php-5.6.31/ext/gd/modules
 
-If you ever happen to want to link against installed libraries
-in a given directory, LIBDIR, you must either use libtool, and
-specify the full pathname of the library, or use the `-LLIBDIR'
+If you ever happen to want to &lt;span class=&quot;nb&quot;&gt;link &lt;/span&gt;against installed libraries
+&lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-LLIBDIR&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'
 flag during linking and do at least one of the following:
-   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+   - add LIBDIR to the `LD_LIBRARY_PATH'&lt;/span&gt; environment variable
      during execution
-   - add LIBDIR to the `LD_RUN_PATH' environment variable
+   - add LIBDIR to the &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;LD_RUN_PATH&lt;span class=&quot;s1&quot;&gt;' environment variable
      during linking
-   - use the `-Wl,-rpath -Wl,LIBDIR' linker flag
-   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+   - use the `-Wl,-rpath -Wl,LIBDIR'&lt;/span&gt; linker flag
+   - have your system administrator add LIBDIR to &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;/etc/ld.so.conf&lt;span class=&quot;s1&quot;&gt;'
 
 See any operating system documentation about shared libraries for
 more information, such as the ld(1) and ld.so(8) manual pages.
 ----------------------------------------------------------------------
 Installing shared extensions:     /usr/lib64/php/modules/
 Installing header files:           /usr/include/php/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Copy the gd.so file from the modules dir, to the modules dir of your PHP installation.
-You need to overwrite the gd.so file that already is present.
-In this case that was &lt;em&gt;/usr/lib64/php/modules/&lt;/em&gt;  as was told by the output above.&lt;/p&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Restart Apache, and verify that the new GD module is working.
-Check &lt;code&gt;phpinfo();&lt;/code&gt; to see if the module is there and check your error logs to see if PHP isn&amp;#39;t having trouble with your new GD extension.&lt;/p&gt;
+&lt;p&gt;Copy the gd.so file from the modules dir, to the modules dir of your PHP installation.&lt;br /&gt;
+You need to overwrite the gd.so file that already is present.&lt;br /&gt;
+In this case that was /usr/lib64/php/modules/ as was told by the output above.&lt;/p&gt;
 
-&lt;p&gt;If that&amp;#39;s all good, &lt;code&gt;function_exists()&lt;/code&gt; should return &lt;code&gt;true&lt;/code&gt; now:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ php -r &quot;var_dump(function_exists('imageantialias'));&quot;
-bool(true)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">When using PHP5.6 with the GD module enabled, you can miss out on some GD function when PHP itself isn&amp;#39;t compiled with GD support enabled. Errors like this may pop up in your php_error.log</summary></entry><entry><title type="html">Satis and S3</title><link href="https://jbleijenberg.github.io/satis-and-s3/" rel="alternate" type="text/html" title="Satis and S3" /><published>2017-03-23T03:23:00+01:00</published><updated>2017-03-23T03:23:00+01:00</updated><id>https://jbleijenberg.github.io/satis-and-s3</id><content type="html" xml:base="https://jbleijenberg.github.io/satis-and-s3/">&lt;h2&gt;Satis and AWS S3&lt;/h2&gt;
+&lt;p&gt;Restart Apache, and verify that the new GD module is working.&lt;br /&gt;
+Check phpinfo(); to see if the module is there and check your error logs to see if PHP isn’t having trouble with your new GD extension.&lt;/p&gt;
 
-&lt;p&gt;Satis is a static composer repository generator. It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.&lt;/p&gt;
+&lt;p&gt;If that’s all good, &lt;code class=&quot;highlighter-rouge&quot;&gt;function_exists()&lt;/code&gt; should return true now.&lt;/p&gt;
 
-&lt;p&gt;It&amp;#39;s alse possible to use Satis as a proxy for packages found on Packagist, GitHub or any other repository.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;php &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;var_dump(function_exists('imageantialias'));&quot;&lt;/span&gt;
+bool&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+				<pubDate>Thu, 12 Oct 2017 00:00:00 +0200</pubDate>
+				<link>http://localhost:4000/20171012/recompile-gd-module-for-php-56x/</link>
+				<guid isPermaLink="true">http://localhost:4000/20171012/recompile-gd-module-for-php-56x/</guid>
+			</item>
+		
+			<item>
+				<title>Satis &amp; S3</title>
+        <description>&lt;p&gt;Prerequisites:&lt;/p&gt;
 
-&lt;p&gt;When we started with Satis, we hosted it on a small server which required Apache to serve satis.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;/20170323/s3-bucket-for-satis&quot;&gt;Create an S3 bucket&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;Because the number of packages and repositories grew as we started to work on bigger and more projects, we ran into the &amp;quot;limitations&amp;quot; of hosting Satis on a webserver.&lt;/p&gt;
+&lt;p&gt;Satis is a static composer repository generator.&lt;br /&gt;
+It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.&lt;/p&gt;
 
-&lt;p&gt;These weren&amp;#39;t really limitations, but we figured that using a webserver was actually overkill because Satis is nothing more than static content.&lt;/p&gt;
+&lt;p&gt;It’s alse possible to use Satis as a proxy for packages found on Packagist, GitHub or any other repository.&lt;/p&gt;
 
-&lt;p&gt;This is where AWS S3 came in the picture. S3 is perfect for serving static content without the need of a webserver. A big advantage is that you don&amp;#39;t pay a lot for storage,or traffic. And when first registering an AWS account, you are eligable for the free tier. (See: https://aws.amazon.com/s3/pricing/)&lt;/p&gt;
+&lt;p&gt;When i started with Satis, i hosted it on a small server which required Apache to serve Satis.&lt;br /&gt;
+Because the number of packages and repositories grew as i started to work on bigger and more projects, i ran into the “limitations” of hosting Satis on a webserver.&lt;/p&gt;
+
+&lt;p&gt;These weren’t really limitations, but i figured that using a webserver was actually overkill because Satis is nothing more than static content.&lt;/p&gt;
+
+&lt;p&gt;This is where AWS S3 came in the picture.&lt;br /&gt;
+S3 is perfect for serving static content without the need of a webserver.&lt;br /&gt;
+A big advantage is that you don’t pay a lot for storage,or traffic.&lt;br /&gt;
+And when first registering an AWS account, you are eligable for the free tier. (See: https://aws.amazon.com/s3/pricing/)&lt;/p&gt;
 
 &lt;p&gt;So no more worries for large Satis configurations!&lt;/p&gt;
 
-&lt;h3&gt;So how did we do this&lt;/h3&gt;
+&lt;p&gt;So how did i do this?&lt;br /&gt;
+Actually, very little changed in the way we generate our Satis files.&lt;br /&gt;
+My satis configuration has its own repository, so i can add new repositories when needed. Whenever a pull request is merged into the mainline, a build agents picks up on this change&lt;br /&gt;
+and starts to build Satis.&lt;br /&gt;
+Nothing exiting is going on there.&lt;/p&gt;
 
-&lt;p&gt;Actually, very little changed in the way we generate our Satis files. Our satis configuration has its own repository, so our developers can add new repositories when needed. Whenever a pull request is merged into our mainline, our build agents picks up on this change. And starts to build Satis. Nothing exiting is going on there.&lt;/p&gt;
+&lt;p&gt;I removed the existing Satis build and create a new one:&lt;/p&gt;
 
-&lt;p&gt;We remove our existing Satis build and create a new one. &lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ rm -rf web/include/* satis build -n -vvv satis.json web/ 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This process might take a while of you have a lot of repositories. Depending on your Satis configuration, all package version might be downloaded. This is preferred by us, because not all projects have to (or can) use the latest version of a package. And since S3 is pretty limitless when it comes to storage, we&amp;#39;ll just download everything.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; web/include/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; satis build &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-vvv&lt;/span&gt; satis.json web/ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;The configuration that makes sure we want to use Satis as a proxy is as follows:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-plain&quot; data-lang=&quot;plain&quot;&gt;{
-    &quot;require-all&quot;: true,
-    &quot;archive&quot;: {
-        &quot;directory&quot;: &quot;dist&quot;,
-        &quot;format&quot;: &quot;tar&quot;,
-        &quot;skip-dev&quot;: true,
-        &quot;whitelist&quot;: [
-            &quot;&amp;lt;manufacturer&amp;gt;/&amp;lt;package&amp;gt;&quot;,
-        ]
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;The whitelist flag is optional. When left out, every package, version and dependancy is archived. It&amp;#39;s up to you do decide what you want to proxy. Creating projects with as many packages from your proxy speeds up the &lt;code&gt;composer install&lt;/code&gt; precess quite a bit, because composer doesn&amp;#39;t hae to clone every repository.&lt;/p&gt;
+&lt;p&gt;This process might take a while of you have a lot of repositories.&lt;br /&gt;
+Depending on your Satis configuration, all package version might be downloaded.&lt;br /&gt;
+This is preferred by me, because not all projects have to (or can) use the latest version of a package.&lt;br /&gt;
+And since S3 is pretty limitless when it comes to storage, i’ll just download everything.&lt;/p&gt;
 
-&lt;p&gt;After the Satis build is done, we want to upload/sync everything inside &amp;#39;web/&amp;#39; to S3.&lt;/p&gt;
+&lt;p&gt;The configuration that makes sure i want to use Satis as a proxy is as follows:&lt;/p&gt;
 
-&lt;p&gt;Our build agent has the AWS CLI binary installed, so this is pretty easy:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-&quot; data-lang=&quot;&quot;&gt;$ aws s3 sync --delete . s3://&amp;lt;your-pretty-bucket&amp;gt;/
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;require-all&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;archive&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;directory&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dist&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;format&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;tar&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;skip-dev&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;whitelist&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;manufacturer&amp;gt;/&amp;lt;package&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The whitelist flag is optional.&lt;br /&gt;
+When left out, every package, version and dependancy is archived.&lt;br /&gt;
+It’s up to you do decide what you want to proxy. Creating projects with as many packages from your proxy speeds up the composer install precess quite a bit, because composer doesn’t hae to clone every repository.&lt;/p&gt;
+
+&lt;p&gt;After the Satis build is done, you want to upload/sync everything inside ‘web/’ to S3.&lt;/p&gt;
+
+&lt;p&gt;My build agent has the AWS CLI binary installed, so this is pretty easy:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;aws s3 &lt;span class=&quot;nb&quot;&gt;sync&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--delete&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; s3://&amp;lt;your-bucket&amp;gt;/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
 &lt;p&gt;This will sync your Satis build to S3, and will remove any packages that are no longer present within Satis.&lt;/p&gt;
 
-&lt;p&gt;That&amp;#39;s it. Now your satis build is usable from AWS S3.&lt;/p&gt;
+&lt;p&gt;That’s it. Now your satis build is usable from AWS S3.&lt;/p&gt;
 
-&lt;h3&gt;Wait, i don&amp;#39;t have an S3 bucket yet.&lt;/h3&gt;
+&lt;p&gt;If you want to use a more human friendly domain, you could use CloudFront to serve the files
+I’ve written a &lt;a href=&quot;/20170323/from-cloudfront-to-s3&quot;&gt;small article&lt;/a&gt; on how to accomplish this&lt;/p&gt;
+</description>
+				<pubDate>Thu, 23 Mar 2017 00:00:00 +0100</pubDate>
+				<link>http://localhost:4000/20170323/satis-and-s3/</link>
+				<guid isPermaLink="true">http://localhost:4000/20170323/satis-and-s3/</guid>
+			</item>
+		
+			<item>
+				<title>S3 Bucket for Satis</title>
+        <description>&lt;p&gt;Creating an S3 bucket is free.&lt;br /&gt;
+If you don’t have an AWS account yet, &lt;a href=&quot;https://portal.aws.amazon.com/billing/signup#/start&quot;&gt;please make one&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Well, creating an S3 bucket is free. If you don&amp;#39;t have an AWS account yet, please make one.&lt;/p&gt;
+&lt;p&gt;When you have an AWS account, you can &lt;a href=&quot;https://s3.console.aws.amazon.com/s3/home?region=eu-central-1#&quot;&gt;create a S3 bucket&lt;/a&gt;.&lt;br /&gt;
+Choose a name that you can recognize, and choose a region that is close to you.&lt;/p&gt;
 
-&lt;p&gt;When you have an AWS account, you can create a S3 bucket. Choose a name that you can recognize, and choose a region that is close to you. For us Dutchies, Frankfurt or Ireland will be just fine.&lt;/p&gt;
+&lt;p&gt;When choosing a name, add your company name as prefix/suffix so the name is somewhat unique.&lt;br /&gt;
+The name needs to be unique in the entire region you choose, not just in your account.&lt;/p&gt;
 
-&lt;p&gt;When choosing a name, add your company name as prefix/suffix so the name is somewhat unique. The name needs to be unique in the entire region you choose, not just in your account.&lt;/p&gt;
+&lt;p&gt;In the next step, we can disable versioning and logging. Adding tags is up to you.
+For public permission it’s easier to set read permissions to anyone.&lt;br /&gt;
+If you set this to any authenticated user, everyone who wants to run composer install needs an AWS account.&lt;/p&gt;
 
-&lt;p&gt;In the next step, we can disable versioning and logging (we simply just don&amp;#39;t care). Adding tags is up to you.&lt;/p&gt;
-
-&lt;p&gt;For public permission it&amp;#39;s easier to read permissions to anyone. If you set this to any authenticated user, everyone who wants to run composer install needs an AWS account.&lt;/p&gt;
-
-&lt;p&gt;After this, finalize your bucket. It will appear in your bucketlist (pun intended) and click on the name to edit it.&lt;/p&gt;
-
-&lt;p&gt;In the tab &amp;#39;Properties&amp;#39;, go to Static website hosting and select &amp;#39;Use this bucket to host a website&amp;#39;.&lt;/p&gt;
+&lt;p&gt;After this, finalize your bucket.&lt;br /&gt;
+It will appear in your bucketlist (pun intended) and click on the name to edit it.
+In the tab ‘Properties’, go to Static website hosting and select ‘Use this bucket to host a website’.&lt;/p&gt;
 
 &lt;p&gt;Now you have an S3 bucket, ready for your Satis build!&lt;/p&gt;
+</description>
+				<pubDate>Thu, 23 Mar 2017 00:00:00 +0100</pubDate>
+				<link>http://localhost:4000/20170323/s3-bucket-for-satis/</link>
+				<guid isPermaLink="true">http://localhost:4000/20170323/s3-bucket-for-satis/</guid>
+			</item>
+		
+			<item>
+				<title>From Satis to S3 to CloudFront</title>
+        <description>&lt;p&gt;If you created an S3 bucket &lt;a href=&quot;/20170323/satis-and-s3&quot;&gt;for use with Satis&lt;/a&gt;, 
+your bucket should usable for static website hosting, but your endpoint probably looks something like this:&lt;/p&gt;
 
-&lt;h3&gt;But my repo url is so ugly&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://your-pretty-bucket.s3-website-eu-west-1.amazonaws.com&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;Your bucket is usable for static website hosting, but your endpoint probably looks something like this:&lt;/p&gt;
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;http://your-pretty-bucket.s3-website-eu-west-1.amazonaws.com
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;You can simply add a CNAME record to your DNS configuration, to make your S3 a bit easier to access.&lt;/p&gt;
 
-&lt;p&gt;But since a while Composer somewhat forces you to use an repository with secure access, unless you&amp;#39;ve added a flag to ignore this.&lt;/p&gt;
+&lt;p&gt;But since a while Composer somewhat forces you to use an repository with secure access, unless you’ve added a flag to ignore this.&lt;br /&gt;
+When you want to use SSL with your S3 bucket, you will need to configure CloudFront.&lt;br /&gt;
+We will need a Web distribution for this. I’m assuming you have some knowledge of AWS’ services so will not explain what everything means in the CloudFront console.&lt;/p&gt;
 
-&lt;p&gt;When you want to use SSL with your S3 bucket, you will need to configure CloudFront. We will need a Web distribution for this. I&amp;#39;m assuming you have some knowledge of AWS&amp;#39; services so will not explain what everything means in the CloudFront console.&lt;/p&gt;
+&lt;p&gt;The SSL certificate.&lt;/p&gt;
 
-&lt;h3&gt;The SSL certificate.&lt;/h3&gt;
+&lt;p&gt;Unfortunatly CloudFront doesn’t support 4096-bit certificates, but for this purpose 2048-bit is fine too.&lt;br /&gt;
+It’s up to you where you purchase your certificate.&lt;br /&gt;
+You can import your certificate in AWS’ ACM (AWS Certificate Manager) or use ACM to &lt;a href=&quot;https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html&quot;&gt;generate a new certificate&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Unfortunatly CloudFront doesn&amp;#39;t support 4096-bit certificates, but for this purpose 2048-bit is fine too. It&amp;#39;s up to you where you purchase your certificate. You can import your certificate in AWS&amp;#39; ACM (AWS Certificate Manager).&lt;/p&gt;
+&lt;p&gt;Now it’s time to create a new &lt;a href=&quot;https://console.aws.amazon.com/cloudfront/home?region=eu-central-1#create-distribution&quot;&gt;CloudFront distribution&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3&gt;Creating a CloudFront distribution&lt;/h3&gt;
+&lt;p&gt;We are going to need a Web distrubution for this use case.&lt;br /&gt;
+At ‘Origin Domain Name’ choose your Satis bucket, you’ve created in the steps before.&lt;br /&gt;
+Set ‘Viewer Protocol Policy’ to ‘Redirect HTTP to HTTPS’ The ‘Allowed HTTP Methods’ can be set to ‘GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE’&lt;/p&gt;
 
-&lt;p&gt;At &amp;#39;Origin Domain Name&amp;#39; choose your Satis bucket, you&amp;#39;ve created in the steps before. Set &amp;#39;Viewer Protocol Policy&amp;#39; to &amp;#39;Redirect HTTP to HTTPS&amp;#39; The &amp;#39;Allowed HTTP Methods&amp;#39; can be set to &amp;#39;GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE&amp;#39;&lt;/p&gt;
+&lt;p&gt;For ‘Object Caching’ we can use Origin Cache Headers.&lt;br /&gt;
+Set ‘Query String Forwarding and Caching’ to none, for better caching.&lt;/p&gt;
 
-&lt;p&gt;For &amp;#39;Object Caching&amp;#39; we can use Origin Cache Headers. Set &amp;#39;Query String Forwarding and Caching&amp;#39; to none, for better caching.&lt;/p&gt;
+&lt;p&gt;Select the priceclass that’s best suited for you, but ‘Use Only US, Canada and Europe’ is probably fine.&lt;/p&gt;
 
-&lt;p&gt;Select the priceclass that&amp;#39;s best suited for you, but &amp;#39;Use Only US, Canada and Europe&amp;#39; is probably fine.&lt;/p&gt;
+&lt;p&gt;Select ‘Custom SSL Certificate (example.com)’ and choose the certificate you just uploaded/created in ACM.&lt;/p&gt;
 
-&lt;p&gt;Select &amp;#39;Custom SSL Certificate (example.com)&amp;#39; and choose the certificate you just uploaded in ACM.&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Make sure that you select ‘Only Clients that Support Server Name Indication(SNI)’, or else this distrubition is going to cost you about $600,- every month&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;!!! Make sure that you select &amp;#39;Only Clients that Support Server Name Indication(SNI)&amp;#39;, or else this distrubition is going to cost you about $600,- every month !!!&lt;/p&gt;
+&lt;p&gt;Supported HTTP versions can bet set to ‘HTTP/1.1, HTTP/1.0 For the default root object, we need to fill in ‘index.html’&lt;br /&gt;
+Using IPv6 is up to you, no extra charge.&lt;/p&gt;
 
-&lt;p&gt;Supported HTTP versions can bet set to &amp;#39;HTTP/1.1, HTTP/1.0 For the default root object, we need to fill in &amp;#39;index.html&amp;#39;&lt;/p&gt;
-
-&lt;p&gt;Using IPv6 is up to you, no extra charge.&lt;/p&gt;
-
-&lt;p&gt;And that&amp;#39;s it for CloudFront. After your destribution is deployed, you can access with a secure connection. Don&amp;#39;t forget to add the CNAME records to your DNS configuration.&lt;/p&gt;</content><author><name></name></author><summary type="html">Satis and AWS S3 Satis is a static composer repository generator. It does nothing more than creating an index of your packages, from the repositories you added in your Satis configuration.</summary></entry></feed>
+&lt;p&gt;And that’s it for CloudFront. After your destribution is deployed, you can access with a secure connection. Don’t forget to add the CNAME records to your DNS configuration.&lt;/p&gt;
+</description>
+				<pubDate>Thu, 23 Mar 2017 00:00:00 +0100</pubDate>
+				<link>http://localhost:4000/20170323/from-cloudfront-to-s3/</link>
+				<guid isPermaLink="true">http://localhost:4000/20170323/from-cloudfront-to-s3/</guid>
+			</item>
+		
+	</channel>
+</rss>

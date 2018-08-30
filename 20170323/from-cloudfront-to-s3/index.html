@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>From Satis to S3 to CloudFront</title>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,600">
+    <link href="/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Category: Shell" href="/feed.xml" />
+</head>
+
+
+<body class="preload">
+    <div class="top"></div>
+    <div class="profile" style="background-image: url(http://apple.wallpapersfine.com/wallpapers/original/1242x2208/w-9943.jpg);">
+        <img src="http://www.gravatar.com/avatar/664c8d56d6b4f52906e34f81df766d90?s=140" class="img-circle" />
+        <h3>Category: Shell</h3>
+        <p>A tiny blog for DevOPS related items</p>
+        <ul class="social">
+            
+            <a href="http://github.com/jbleijenberg" target="_blank">
+                <i class="fa fa-github"></i>
+            </a>
+             
+            <a href="http://twitter.com/wirelesskitteh" target="_blank">
+                <i class="fa fa-twitter"></i>
+            </a>
+             
+            <a href="http://linkedin.com/in/jeroen-bleijenberg-83417866" target="_blank">
+                <i class="fa fa-linkedin"></i>
+            </a>
+             
+            <a href="http://pinterest.com/" target="_blank">
+                <i class="fa fa-pinterest"></i>
+            </a>
+             
+            <a href="http://facebook.com/" target="_blank">
+                <i class="fa fa-facebook"></i>
+            </a>
+            
+        </ul>
+    </div>
+    <div class="posts">
+        <header class="bloghead">
+    <nav class="bloghead-nav">
+        
+        <a href="/">Home<span> &nbsp;/&nbsp; </span></a> 
+        <a href="/about">About<span> &nbsp;/&nbsp; </span></a> 
+    </nav>
+</header>
+
+<div class="content post">
+  <h1 class="post-title">From Satis to S3 to CloudFront</h1>
+  <div class="post-date">
+    <time>23 Mar 2017</time>
+  </div>
+  <p>If you created an S3 bucket <a href="/20170323/satis-and-s3">for use with Satis</a>, 
+your bucket should usable for static website hosting, but your endpoint probably looks something like this:</p>
+
+<p><code class="highlighter-rouge">http://your-pretty-bucket.s3-website-eu-west-1.amazonaws.com</code></p>
+
+<p>You can simply add a CNAME record to your DNS configuration, to make your S3 a bit easier to access.</p>
+
+<p>But since a while Composer somewhat forces you to use an repository with secure access, unless you’ve added a flag to ignore this.<br />
+When you want to use SSL with your S3 bucket, you will need to configure CloudFront.<br />
+We will need a Web distribution for this. I’m assuming you have some knowledge of AWS’ services so will not explain what everything means in the CloudFront console.</p>
+
+<p>The SSL certificate.</p>
+
+<p>Unfortunatly CloudFront doesn’t support 4096-bit certificates, but for this purpose 2048-bit is fine too.<br />
+It’s up to you where you purchase your certificate.<br />
+You can import your certificate in AWS’ ACM (AWS Certificate Manager) or use ACM to <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html">generate a new certificate</a>.</p>
+
+<p>Now it’s time to create a new <a href="https://console.aws.amazon.com/cloudfront/home?region=eu-central-1#create-distribution">CloudFront distribution</a></p>
+
+<p>We are going to need a Web distrubution for this use case.<br />
+At ‘Origin Domain Name’ choose your Satis bucket, you’ve created in the steps before.<br />
+Set ‘Viewer Protocol Policy’ to ‘Redirect HTTP to HTTPS’ The ‘Allowed HTTP Methods’ can be set to ‘GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE’</p>
+
+<p>For ‘Object Caching’ we can use Origin Cache Headers.<br />
+Set ‘Query String Forwarding and Caching’ to none, for better caching.</p>
+
+<p>Select the priceclass that’s best suited for you, but ‘Use Only US, Canada and Europe’ is probably fine.</p>
+
+<p>Select ‘Custom SSL Certificate (example.com)’ and choose the certificate you just uploaded/created in ACM.</p>
+
+<blockquote>
+  <p>Make sure that you select ‘Only Clients that Support Server Name Indication(SNI)’, or else this distrubition is going to cost you about $600,- every month</p>
+</blockquote>
+
+<p>Supported HTTP versions can bet set to ‘HTTP/1.1, HTTP/1.0 For the default root object, we need to fill in ‘index.html’<br />
+Using IPv6 is up to you, no extra charge.</p>
+
+<p>And that’s it for CloudFront. After your destribution is deployed, you can access with a secure connection. Don’t forget to add the CNAME records to your DNS configuration.</p>
+
+</div>
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+var disqus_shortname = '';
+var disqus_identifier = '/20170323/from-cloudfront-to-s3/';
+
+(function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+</body>
+<script type="text/javascript">
+    window.onload = function(){
+        document.getElementsByTagName("BODY")[0].classList.remove("preload");
+    }
+</script>
+</html>

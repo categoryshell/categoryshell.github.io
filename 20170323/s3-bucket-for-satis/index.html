@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Category: Shell</title>
+    <title>S3 Bucket for Satis</title>
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,600">
     <link href="/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
@@ -50,54 +50,50 @@
     </nav>
 </header>
 
-<div class="content">
-     
-    <div class="post-list">
-        <h2 class="post-title">
-      <a href="/20171012/recompile-gd-module-for-php-56x/">Recompile GD for PHP5.6</a>
-    </h2> 
-        <p>How to (re)compile the GD library for PHP5.6</p>
-        
-        <div class="post-date">
-            <time>12 Oct 2017</time>
-        </div>
-    </div>
-    
-    <div class="post-list">
-        <h2 class="post-title">
-      <a href="/20170323/satis-and-s3/">Satis & S3</a>
-    </h2> 
-        <p>How to deploy your satis repositoy mirror to S3</p>
-        
-        <div class="post-date">
-            <time>23 Mar 2017</time>
-        </div>
-    </div>
-    
-    <div class="post-list">
-        <h2 class="post-title">
-      <a href="/20170323/s3-bucket-for-satis/">S3 Bucket for Satis</a>
-    </h2> 
-        <p>How to create an S3 bucket for Satis</p>
-        
-        <div class="post-date">
-            <time>23 Mar 2017</time>
-        </div>
-    </div>
-    
-    <div class="post-list">
-        <h2 class="post-title">
-      <a href="/20170323/from-cloudfront-to-s3/">From Satis to S3 to CloudFront</a>
-    </h2> 
-        <p>How to serve Satis content with CloudFront and S3</p>
-        
-        <div class="post-date">
-            <time>23 Mar 2017</time>
-        </div>
-    </div>
-     
-  
+<div class="content post">
+  <h1 class="post-title">S3 Bucket for Satis</h1>
+  <div class="post-date">
+    <time>23 Mar 2017</time>
+  </div>
+  <p>Creating an S3 bucket is free.<br />
+If you don’t have an AWS account yet, <a href="https://portal.aws.amazon.com/billing/signup#/start">please make one</a>.</p>
+
+<p>When you have an AWS account, you can <a href="https://s3.console.aws.amazon.com/s3/home?region=eu-central-1#">create a S3 bucket</a>.<br />
+Choose a name that you can recognize, and choose a region that is close to you.</p>
+
+<p>When choosing a name, add your company name as prefix/suffix so the name is somewhat unique.<br />
+The name needs to be unique in the entire region you choose, not just in your account.</p>
+
+<p>In the next step, we can disable versioning and logging. Adding tags is up to you.
+For public permission it’s easier to set read permissions to anyone.<br />
+If you set this to any authenticated user, everyone who wants to run composer install needs an AWS account.</p>
+
+<p>After this, finalize your bucket.<br />
+It will appear in your bucketlist (pun intended) and click on the name to edit it.
+In the tab ‘Properties’, go to Static website hosting and select ‘Use this bucket to host a website’.</p>
+
+<p>Now you have an S3 bucket, ready for your Satis build!</p>
+
 </div>
+
+  
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+var disqus_shortname = '';
+var disqus_identifier = '/20170323/s3-bucket-for-satis/';
+
+(function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+
+
 
     </div>
 </body>
