@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Category: Shell > S3 Bucket for Satis</title>
+    <title>Category: Shell > Reset Bareos to a clean state</title>
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,600">
     <link href="/resources/font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
@@ -59,28 +59,42 @@
 </header>
 
 <div class="content post">
-  <h1 class="post-title">S3 Bucket for Satis</h1>
+  <h1 class="post-title">Reset Bareos to a clean state</h1>
   <div class="post-date">
-    <time>23 Mar 2017</time>
+    <time>24 Apr 2019</time>
   </div>
-  <p>Creating an S3 bucket is free.<br />
-If you don’t have an AWS account yet, <a href="https://portal.aws.amazon.com/billing/signup#/start">please make one</a>.</p>
+  <p>Whenever you want to reset your Bareos instance, for example, after a lot of testing you<br />
+can run just a few commands to accomplish this.</p>
 
-<p>When you have an AWS account, you can <a href="https://s3.console.aws.amazon.com/s3/home?region=eu-central-1#">create a S3 bucket</a>.<br />
-Choose a name that you can recognize, and choose a region that is close to you.</p>
+<p>First, stop your Bareos services:</p>
 
-<p>When choosing a name, add your company name as prefix/suffix so the name is somewhat unique.<br />
-The name needs to be unique in the entire region you choose, not just in your account.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ service bareos-dir stop
+$ service bareos-sd stop
+$ service bareos-fd stop
 
-<p>In the next step, we can disable versioning and logging. Adding tags is up to you.
-For public permission it’s easier to set read permissions to anyone.<br />
-If you set this to any authenticated user, everyone who wants to run composer install needs an AWS account.</p>
+</code></pre></div></div>
 
-<p>After this, finalize your bucket.<br />
-It will appear in your bucketlist (pun intended) and click on the name to edit it.
-In the tab ‘Properties’, go to Static website hosting and select ‘Use this bucket to host a website’.</p>
+<p>Then clean the files from your Bareos server:</p>
 
-<p>Now you have an S3 bucket, ready for your Satis build!</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rm  /var/lib/bareos/*
+</code></pre></div></div>
+
+<p>Go to the Bareos scripts directory and run these commands to drop and rebuild the database:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cd /usr/lib/bareos/scripts
+
+$ ./drop_bareos_database
+$ ./create_bareos_database
+$ ./make_bareos_tables
+$ ./grant_bareos_privileges
+</code></pre></div></div>
+
+<p>After you’re done, start the Bareos services and you should be good to go.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ service bareos-dir start
+$ service bareos-sd start
+$ service bareos-fd start 
+</code></pre></div></div>
 
 </div>
 

@@ -6,6 +6,46 @@
 		<atom:link href="https://www.categoryshell.com/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
+				<title>Reset Bareos to a clean state</title>
+        <description>&lt;p&gt;Whenever you want to reset your Bareos instance, for example, after a lot of testing you&lt;br /&gt;
+can run just a few commands to accomplish this.&lt;/p&gt;
+
+&lt;p&gt;First, stop your Bareos services:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ service bareos-dir stop
+$ service bareos-sd stop
+$ service bareos-fd stop
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then clean the files from your Bareos server:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ rm  /var/lib/bareos/*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Go to the Bareos scripts directory and run these commands to drop and rebuild the database:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cd /usr/lib/bareos/scripts
+
+$ ./drop_bareos_database
+$ ./create_bareos_database
+$ ./make_bareos_tables
+$ ./grant_bareos_privileges
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After you’re done, start the Bareos services and you should be good to go.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ service bareos-dir start
+$ service bareos-sd start
+$ service bareos-fd start 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+</description>
+				<pubDate>Wed, 24 Apr 2019 00:00:00 +0200</pubDate>
+				<link>https://www.categoryshell.com/20190424/reset-bareos-jobs/</link>
+				<guid isPermaLink="true">https://www.categoryshell.com/20190424/reset-bareos-jobs/</guid>
+			</item>
+		
+			<item>
 				<title>Recompile GD for PHP5.6</title>
         <description>&lt;p&gt;When using PHP5.6 with the GD module enabled, you can miss out on some GD function when PHP itself isn’t compiled with GD support enabled.&lt;br /&gt;
 Errors like this may pop up in your php_error.log:&lt;/p&gt;
