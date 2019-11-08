@@ -2,8 +2,8 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
 	<channel>
 		<title>Category: Shell</title>
-		<link>https://www.categoryshell.com</link>
-		<atom:link href="https://www.categoryshell.com/feed.xml" rel="self" type="application/rss+xml" />
+		<link>http://localhost:4000</link>
+		<atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
 		
 			<item>
 				<title>Reset Bareos to a clean state</title>
@@ -41,8 +41,8 @@ $ service bareos-fd start
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
 				<pubDate>Wed, 24 Apr 2019 00:00:00 +0200</pubDate>
-				<link>https://www.categoryshell.com/20190424/reset-bareos-jobs/</link>
-				<guid isPermaLink="true">https://www.categoryshell.com/20190424/reset-bareos-jobs/</guid>
+				<link>http://localhost:4000/20190424/reset-bareos-jobs/</link>
+				<guid isPermaLink="true">http://localhost:4000/20190424/reset-bareos-jobs/</guid>
 			</item>
 		
 			<item>
@@ -141,8 +141,8 @@ bool&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 </description>
 				<pubDate>Thu, 12 Oct 2017 00:00:00 +0200</pubDate>
-				<link>https://www.categoryshell.com/20171012/recompile-gd-module-for-php-56x/</link>
-				<guid isPermaLink="true">https://www.categoryshell.com/20171012/recompile-gd-module-for-php-56x/</guid>
+				<link>http://localhost:4000/20171012/recompile-gd-module-for-php-56x/</link>
+				<guid isPermaLink="true">http://localhost:4000/20171012/recompile-gd-module-for-php-56x/</guid>
 			</item>
 		
 			<item>
@@ -220,8 +220,8 @@ It’s up to you do decide what you want to proxy. Creating projects with as man
 I’ve written a &lt;a href=&quot;/20170323/from-cloudfront-to-s3&quot;&gt;small article&lt;/a&gt; on how to accomplish this&lt;/p&gt;
 </description>
 				<pubDate>Thu, 23 Mar 2017 00:00:00 +0100</pubDate>
-				<link>https://www.categoryshell.com/20170323/satis-and-s3/</link>
-				<guid isPermaLink="true">https://www.categoryshell.com/20170323/satis-and-s3/</guid>
+				<link>http://localhost:4000/20170323/satis-and-s3/</link>
+				<guid isPermaLink="true">http://localhost:4000/20170323/satis-and-s3/</guid>
 			</item>
 		
 			<item>
@@ -246,8 +246,8 @@ In the tab ‘Properties’, go to Static website hosting and select ‘Use this
 &lt;p&gt;Now you have an S3 bucket, ready for your Satis build!&lt;/p&gt;
 </description>
 				<pubDate>Thu, 23 Mar 2017 00:00:00 +0100</pubDate>
-				<link>https://www.categoryshell.com/20170323/s3-bucket-for-satis/</link>
-				<guid isPermaLink="true">https://www.categoryshell.com/20170323/s3-bucket-for-satis/</guid>
+				<link>http://localhost:4000/20170323/s3-bucket-for-satis/</link>
+				<guid isPermaLink="true">http://localhost:4000/20170323/s3-bucket-for-satis/</guid>
 			</item>
 		
 			<item>
@@ -292,8 +292,8 @@ Using IPv6 is up to you, no extra charge.&lt;/p&gt;
 &lt;p&gt;And that’s it for CloudFront. After your destribution is deployed, you can access with a secure connection. Don’t forget to add the CNAME records to your DNS configuration.&lt;/p&gt;
 </description>
 				<pubDate>Thu, 23 Mar 2017 00:00:00 +0100</pubDate>
-				<link>https://www.categoryshell.com/20170323/from-cloudfront-to-s3/</link>
-				<guid isPermaLink="true">https://www.categoryshell.com/20170323/from-cloudfront-to-s3/</guid>
+				<link>http://localhost:4000/20170323/from-cloudfront-to-s3/</link>
+				<guid isPermaLink="true">http://localhost:4000/20170323/from-cloudfront-to-s3/</guid>
 			</item>
 		
 	</channel>
